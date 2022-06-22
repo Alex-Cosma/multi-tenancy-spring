@@ -23,4 +23,8 @@ public class TenantService {
   public Set<String> getSchemas() {
     return findAll().stream().map(Tenant::getSchema).collect(Collectors.toSet());
   }
+
+  public void delete(String schema) {
+    tenantRepo.deleteBySchema(schema);
+  }
 }
