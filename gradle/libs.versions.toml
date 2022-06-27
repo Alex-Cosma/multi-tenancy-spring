@@ -1,0 +1,7 @@
+[versions]
+spring-boot = "2.7.0"
+
+[libraries]
+
+jsonwebtoken = { module = "io.jsonwebtoken:jjwt", version = "0.9.1" }
+spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
