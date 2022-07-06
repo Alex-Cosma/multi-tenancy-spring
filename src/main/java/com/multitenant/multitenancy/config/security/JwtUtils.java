@@ -1,5 +1,6 @@
 package com.multitenant.multitenancy.config.security;
 
+import com.multitenant.multitenancy.config.properties.AppProps;
 import com.multitenant.multitenancy.meta.user.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -18,16 +19,12 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @RequiredArgsConstructor
-@AllArgsConstructor
 @Component
 public class JwtUtils {
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-  @Value("${app.jwtSecret}")
-  private String jwtSecret;
+  private final AppProps appProps;
 
-  @Value("${app.jwtExpirationMs}")
-  private int jwtExpirationMs;
 
   public String generateJwtToken(Authentication authentication) {
 
@@ -36,18 +33,18 @@ public class JwtUtils {
     return Jwts.builder()
         .setSubject((userPrincipal.getUsername()))
         .setIssuedAt(new Date())
-        .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-        .signWith(SignatureAlgorithm.HS512, jwtSecret)
+        .setExpiration(new Date((new Date()).getTime() + appProps.getJwtExpirationMs()))
+        .signWith(SignatureAlgorithm.HS512, appProps.getJwtSecret())
         .compact();
   }
 
   public String getUserNameFromJwtToken(String token) {
-    return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+    return Jwts.parser().setSigningKey(appProps.getJwtSecret()).parseClaimsJws(token).getBody().getSubject();
   }
 
   public boolean validateJwtToken(String authToken) {
     try {
-      Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+      Jwts.parser().setSigningKey(appProps.getJwtSecret()).parseClaimsJws(authToken);
       return true;
     } catch (SignatureException e) {
       logger.error("Invalid JWT signature: {}", e.getMessage());

@@ -5,6 +5,8 @@ import static org.flywaydb.core.api.MigrationVersion.LATEST;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 
+import com.multitenant.multitenancy.config.properties.MetaDatasourceProps;
+import com.multitenant.multitenancy.config.properties.TenantDatasourceProps;
 import com.multitenant.multitenancy.meta.tenant.TenantService;
 import lombok.RequiredArgsConstructor;
 import org.flywaydb.core.Flyway;
@@ -15,24 +17,8 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class FlywayConfig {
 
-  @Value("${tenant.datasource.jdbc-url}")
-  private String tenantDbUrl;
-
-  @Value("${tenant.datasource.username}")
-  private String tenantDbUsername;
-
-  @Value("${tenant.datasource.password}")
-  private String tenantDbPassword;
-
-  @Value("${meta.datasource.jdbc-url}")
-  private String metadataDbUrl;
-
-  @Value("${meta.datasource.username}")
-  private String metadataDbUsername;
-
-  @Value("${meta.datasource.password}")
-  private String metadataDbPassword;
-
+  private final TenantDatasourceProps tenantDatasourceProps;
+  private final MetaDatasourceProps metaDatasourceProps;
   private final TenantService tenantService;
 
   @PostConstruct
@@ -43,7 +29,11 @@ public class FlywayConfig {
         tenant -> {
           Flyway tenantDbMigration =
               Flyway.configure()
-                  .dataSource(tenantDbUrl, tenantDbUsername, tenantDbPassword)
+                  .dataSource(
+                      tenantDatasourceProps.getJdbcUrl(),
+                      tenantDatasourceProps.getUsername(),
+                      tenantDatasourceProps.getPassword()
+                  )
                   .locations("classpath:migrations/tenant")
                   .target(LATEST)
                   .baselineOnMigrate(true)
@@ -54,7 +44,11 @@ public class FlywayConfig {
 
     Flyway metadataDbMigration =
         Flyway.configure()
-            .dataSource(metadataDbUrl, metadataDbUsername, metadataDbPassword)
+            .dataSource(
+                metaDatasourceProps.getJdbcUrl(),
+                metaDatasourceProps.getUsername(),
+                metaDatasourceProps.getPassword()
+            )
             .locations("classpath:migrations/metadata")
             .baselineOnMigrate(true)
             .target(LATEST)

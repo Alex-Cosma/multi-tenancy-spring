@@ -1,5 +1,6 @@
 package com.multitenant.multitenancy.meta.tenant.pool;
 
+import com.multitenant.multitenancy.config.properties.TenantPoolProps;
 import com.multitenant.multitenancy.meta.tenant.TenantService;
 import com.multitenant.multitenancy.persistence.TenantDatabaseService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,11 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 @Transactional
 public class TenantPoolService {
-  @Value("${tenant.pool.size}")
-  private int MIN_UNUSED_TENANTS;
 
   private final TenantPoolRepo tenantPoolRepo;
   private final TenantService tenantService;
   private final TenantDatabaseService tenantDatabaseService;
+  private final TenantPoolProps tenantPoolProps;
 
   public String takeTenant() {
     TenantPool tenantFromPool = tenantPoolRepo.findFirstByUsedIsFalseOrderByDateCreatedAsc().get();
@@ -32,7 +32,7 @@ public class TenantPoolService {
 
   public void fillUpTenantPool() {
     final long unusedTenants = tenantPoolRepo.countByUsedFalse();
-    if (unusedTenants < MIN_UNUSED_TENANTS) {
+    if (unusedTenants < tenantPoolProps.getSize()) {
       createEmptyTenant();
     }
   }
