@@ -1,17 +1,16 @@
 package com.multitenant.multitenancy.config.db.flyway;//package com.datacave.acteamo.config.db.flyway;
 
-import static org.flywaydb.core.api.MigrationVersion.LATEST;
-
-import java.util.Set;
-import javax.annotation.PostConstruct;
-
 import com.multitenant.multitenancy.config.properties.MetaDatasourceProps;
 import com.multitenant.multitenancy.config.properties.TenantDatasourceProps;
 import com.multitenant.multitenancy.meta.tenant.TenantService;
 import lombok.RequiredArgsConstructor;
 import org.flywaydb.core.Flyway;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
+import java.util.Set;
+
+import static org.flywaydb.core.api.MigrationVersion.LATEST;
 
 @Configuration
 @RequiredArgsConstructor

@@ -4,7 +4,6 @@ import com.multitenant.multitenancy.config.multitenancy.TenantContext;
 import com.multitenant.multitenancy.meta.user.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

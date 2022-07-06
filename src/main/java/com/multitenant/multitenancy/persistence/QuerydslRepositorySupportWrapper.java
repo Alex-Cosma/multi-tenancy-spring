@@ -31,8 +31,10 @@ public abstract class QuerydslRepositorySupportWrapper {
 
   protected final PathBuilder<?> builder;
 
-  @Nullable protected EntityManager entityManager;
-  @Nullable protected Querydsl querydsl;
+  @Nullable
+  protected EntityManager entityManager;
+  @Nullable
+  protected Querydsl querydsl;
 
   public QuerydslRepositorySupportWrapper(Class<?> domainClass) {
 

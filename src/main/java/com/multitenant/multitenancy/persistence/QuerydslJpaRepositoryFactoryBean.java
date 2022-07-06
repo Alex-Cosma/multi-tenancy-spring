@@ -32,7 +32,8 @@ public class QuerydslJpaRepositoryFactoryBean<R extends JpaRepository<T, ID>, T,
 
     @Override
     @NonNull
-    protected JpaRepositoryImplementation<?, ?> getTargetRepository(RepositoryInformation information, @NonNull EntityManager entityManager) {
+    protected JpaRepositoryImplementation<?, ?> getTargetRepository(RepositoryInformation information,
+                                                                    @NonNull EntityManager entityManager) {
       if (isQueryDslRepository(information)) {
         return new QuerydslJpaBaseRepository<>(getEntityInformation(information.getDomainType()), entityManager);
       }
